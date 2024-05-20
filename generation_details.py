@@ -1,5 +1,6 @@
 import os
 import json
+from password_creation import *
 
 
 class JsonFiles:
@@ -14,14 +15,16 @@ class JsonFiles:
     def get_current_directory(self):
         return self.current_directory
 
-
-def prompt_user_for_extraction():
+def prompt_user_options():
     json_information = JsonFiles()
     print("[+] - This program is simply a diceware clone designed to take in file types, extract details such as "
-          "Usernames, Emails, and Passwords so that further analysis can easily be done.\n"
-          "Please note: This program will only take in files within the current directory.\n")
+              "Usernames, Emails, and Passwords so that further analysis can easily be done.\n"
+              "Please note: This program will only take in files within the current directory.\n")
     selection = input("[+] Please specify the type of file you would like to extract inside of the directory: {} \n["
                       "\"json\"]\n".format(json_information.get_current_directory()))
+
+def prompt_user_for_extraction():
+
 
     if selection == 'json':
         print("[+] - Please choose a JSON file to extract from the following list:")
@@ -29,7 +32,7 @@ def prompt_user_for_extraction():
         for i, json_file in enumerate(json_files):
             print(f"{i + 1}: {json_file}")
 
-        file_choice = int(input("[+] Enter the number corresponding to the JSON file: ")) - 1
+        file_choice = int(input("[+] Enter the number corresponding to the JSON file: \n")) - 1
         if 0 <= file_choice < len(json_files):
             json_specific_file = json_files[file_choice]
             print(f"[+] You have selected: {json_specific_file}")
@@ -37,7 +40,7 @@ def prompt_user_for_extraction():
             user_input = input("[1] Find usernames\n"
                                "[2] Find emails\n"
                                "[3] Find passwords\n"
-                               "[4] Exit")
+                               "[4] Exit\n")
             if user_input == '1':
                 print("NULL WILL BE UPDATED LATER")
             elif user_input == '2':
@@ -47,15 +50,28 @@ def prompt_user_for_extraction():
                                          "[1] Generate and replace all \n"
                                          "[2] Generate and print new passwords \n")
                 if password_options == '1':
-                    print("NULL WILL BE UPDATED LATER")
+                    new_passkey_lengths = int(input("What is your preferred passkey length?\n"))
+                    data = read_specific_json_file(json_specific_file)
+                    items = data['items']
+                    for item in items:
+                        new_password = generate_dice_rolls(new_passkey_lengths)
+                        item['login']['password'] = new_password
+                        username = item['login']['username']
+                        password = item['login']['password']
+                        print(f"[+] Username: {username} NEW Password: {new_password}")
+
+
                 elif password_options == '2':
                     print("Attempting Password Pull")
                     data = read_specific_json_file(json_specific_file)
                     items = data['items']
+                    amount_of_accounts = 0
                     for item in items:
-                        print(item['login']['password'])
-
-
+                        amount_of_accounts += 1
+                        username = item['login']['username']
+                        password = item['login']['password']
+                        print(f"[+] Username: {username} Password: {password}")
+                    print(amount_of_accounts)
             elif user_input == '4':
                 print("Exiting...JK")
         else:
