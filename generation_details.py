@@ -15,17 +15,17 @@ class JsonFiles:
     def get_current_directory(self):
         return self.current_directory
 
+
 def prompt_user_options():
     json_information = JsonFiles()
     print("[+] - This program is simply a diceware clone designed to take in file types, extract details such as "
-              "Usernames, Emails, and Passwords so that further analysis can easily be done.\n"
-              "Please note: This program will only take in files within the current directory.\n")
+          "Usernames, Emails, and Passwords so that further analysis can easily be done.\n"
+          "Please note: This program will only take in files within the current directory.\n")
     selection = input("[+] Please specify the type of file you would like to extract inside of the directory: {} \n["
                       "\"json\"]\n".format(json_information.get_current_directory()))
 
+
 def prompt_user_for_extraction():
-
-
     if selection == 'json':
         print("[+] - Please choose a JSON file to extract from the following list:")
         json_files = json_information.get_json_files()
